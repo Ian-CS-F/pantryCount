@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1d201c">
+<title>Pantry Count</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<section class="band station">
+ <div class="wrap">
+  <div class="top"><h1>Pantry Count</h1><span id="sync">Starting…</span></div>
+  <div class="seg" role="group" aria-label="Mode">
+   <button id="mAdd" aria-pressed="true">Add stock</button>
+   <button id="mUse" aria-pressed="false">Use up</button>
+  </div>
+  <div class="locs" id="locs" role="group" aria-label="Location"></div>
+  <div class="cam" id="camBox">
+   <video id="vid" playsinline muted></video>
+   <div class="guide" aria-hidden="true"></div>
+   <div class="flash" id="flash" aria-hidden="true"></div>
+   <button id="camBtn" class="camstart"><span class="big" id="camTxt">Start scanning</span><small id="camSub">Point the camera at barcodes. Each one is counted as it's read.</small></button>
+   <div class="camctl" id="camCtl" hidden><button id="torch" hidden>Light</button><button id="camStop">Stop</button></div>
+  </div>
+  <div id="last" class="last" aria-live="polite"></div>
+  <form id="typed" class="row"><input id="typedIn" placeholder="Type a barcode or item name" aria-label="Barcode or item name" autocomplete="off" enterkeyhint="go"><button class="ghost">Add</button></form>
+  <label class="opt"><input type="checkbox" id="askExp" checked> Ask for date and quantity on each add</label>
+ </div>
+</section>
+<section class="band">
+ <div class="wrap">
+  <div class="stats">
+   <button class="stat" data-f="all"><b class="num" id="sTot">0</b><span>items in stock</span></button>
+   <button class="stat warn" data-f="soon"><b class="num" id="sSoon">0</b><span>use within 7 days</span></button>
+   <button class="stat bad" data-f="gone"><b class="num" id="sGone">0</b><span>past date</span></button>
+  </div>
+  <div class="filters">
+   <input id="q" type="search" placeholder="Search" aria-label="Search inventory">
+   <select id="fLoc" aria-label="Filter by location"></select>
+  </div>
+  <div class="chips" id="fChips" role="group" aria-label="Show"><button data-f="all" aria-pressed="true">All</button><button data-f="soon" aria-pressed="false">Use soon</button><button data-f="gone" aria-pressed="false">Past date</button><button data-f="none" aria-pressed="false">No date</button></div>
+  <ul id="list"><li class="empty">Loading inventory…</li></ul>
+  <div class="foot"><button id="copyCsv">Copy as CSV</button><button id="dlCsv">Download CSV</button><button id="share">Copy household link</button></div>
+  <p class="note">Product names come from <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a>. Anyone with the household link can view and edit this list.</p>
+ </div>
+</section>
+<div id="sheet" role="dialog" aria-modal="true" aria-labelledby="shT"><div class="panel">
+ <img id="shImg" class="prev" alt="" hidden>
+ <h2 id="shT">New item</h2><div class="code" id="shCode"></div>
+ <label class="fld"><span>Name</span><input id="shName" placeholder="e.g. Chopped tomatoes 400g" autocomplete="off"></label>
+ <label class="fld"><span>Location</span><select id="shLoc"></select></label>
+ <div class="fld"><span>Quantity</span><div class="qty"><button type="button" id="shMinus" aria-label="Less">−</button><b class="num" id="shQty">1</b><button type="button" id="shPlus" aria-label="More">+</button></div></div>
+ <div class="fld"><span>Best before / use by</span><input type="date" id="shExp">
+  <div class="chips" id="expChips"><button data-d="">No date</button><button data-d="7">1 week</button><button data-d="30">1 month</button><button data-d="90">3 months</button><button data-d="182">6 months</button><button data-d="365">1 year</button></div></div>
+ <div class="acts"><button id="shSkip">Skip</button><button id="shDel" class="del" hidden>Remove</button><button id="shSave" class="pri">Save</button></div>
+</div></div>
+<div id="gate" hidden><div class="panel gatep">
+ <h2>Join your household</h2>
+ <p>Open the household link you were sent, or paste it here.</p>
+ <form id="gateF"><input id="gateIn" placeholder="Paste household link or key" autocomplete="off"><button class="pri">Open</button></form>
+ <p id="gateErr" class="err"></p>
+</div></div>
+<div id="toast" role="status"><span id="tMsg"></span><button id="tUndo">Undo</button></div>
+<script src="https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
